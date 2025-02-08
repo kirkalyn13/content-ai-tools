@@ -5,6 +5,7 @@ import com.engrkirky.contentaitools.dto.GeneratedContent;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -15,8 +16,6 @@ import java.util.Map;
 
 @Service
 public class ContentServiceImpl implements ContentService {
-    @Value("classpath:/prompts/content.st")
-    private Resource contentResource;
     private final ChatClient chatClient;
 
     @Autowired
@@ -26,19 +25,29 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public GeneratedContent generateContent(ContentParams contentParams) {
-        PromptTemplate promptTemplate = new PromptTemplate(contentResource);
-        Map<String, Object> promptParams = new HashMap<>();
+        String promptMessage = """
+                Generate {contentType} content in rich text format about {topic} with a length of {length} words. Only return the content.
+                {format}
+                """;
 
+        BeanOutputConverter<GeneratedContent> outputParser = new BeanOutputConverter<>(GeneratedContent.class);
+        String format = outputParser.getFormat();
+
+        Map<String, Object> promptParams = new HashMap<>();
         promptParams.put("contentType", contentParams.contentType());
         promptParams.put("topic", contentParams.topic());
         promptParams.put("length", contentParams.length());
+        promptParams.put("format", format);
 
-        Prompt prompt = promptTemplate.create(promptParams);
+        PromptTemplate promptTemplate = new PromptTemplate(promptMessage, promptParams);
+
+        Prompt prompt = promptTemplate.create();
         String content = chatClient.prompt()
                 .user(prompt.toString())
                 .call()
                 .content();
 
-        return new GeneratedContent(contentParams.contentType(), content);
+        return outputParser.convert(content);
     }
+
 }
