@@ -1,6 +1,7 @@
 package com.engrkirky.contentaitools.service;
 
 import com.engrkirky.contentaitools.config.SummaryConfigProperties;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,17 @@ public class SummarizeService implements Function<SummarizeService.Request, Summ
     @Override
     public SummarizeService.Response apply(SummarizeService.Request request) {
         log.info("Summary Request: {}", request);
-        Response response = restClient.get()
+
+        JsonNode response = restClient.get()
                 .uri("/{id}", request.id())
                 .retrieve()
-                .body(Response.class);
+                .body(JsonNode.class);
+
         log.info("Summary Response: {}", response);
-        return response;
+
+        return new Response(response);
     }
 
     public record Request(int id) {}
-    public record Response(Object content) {}
+    public record Response(JsonNode content) {}
 }
