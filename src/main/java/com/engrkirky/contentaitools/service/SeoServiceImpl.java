@@ -1,6 +1,6 @@
 package com.engrkirky.contentaitools.service;
 
-import com.engrkirky.contentaitools.dto.Translation;
+import com.engrkirky.contentaitools.dto.SeoRecommendation;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -12,28 +12,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class TranslationServiceImpl implements TranslationService {
+public class SeoServiceImpl implements SeoService {
     private final ChatClient chatClient;
 
     @Autowired
-    public TranslationServiceImpl(ChatClient.Builder builder) {
+    public SeoServiceImpl(ChatClient.Builder builder) {
         this.chatClient = builder.build();
     }
 
     @Override
-    public Translation translate(Translation translation) {
+    public SeoRecommendation recommendSeoMetadata(String topic) {
         String promptMessage = """
-                You are a machine translator. Your task is to only translate a text to the specified language.
-                Only return the translated text. Translate the following text to {language}: {text}
+                Suggest the SEO Title Tag, Meta Description, Abstract, and Target Keyword based on the following topic: {topic}
                 {format}
                 """;
 
-        BeanOutputConverter<Translation> outputParser = new BeanOutputConverter<>(Translation.class);
+        BeanOutputConverter<SeoRecommendation> outputParser = new BeanOutputConverter<>(SeoRecommendation.class);
         String format = outputParser.getFormat();
 
-        Map<String, Object> promptParams = getPromptParams(translation, format);
-
+        Map<String, Object> promptParams = getPromptParams(topic, format);
         PromptTemplate promptTemplate = new PromptTemplate(promptMessage, promptParams);
+
         Prompt prompt = promptTemplate.create();
         String content = chatClient.prompt()
                 .user(prompt.toString())
@@ -43,11 +42,11 @@ public class TranslationServiceImpl implements TranslationService {
         return outputParser.convert(content);
     }
 
-    private static Map<String, Object> getPromptParams(Translation translation, String format) {
+    private static Map<String, Object> getPromptParams(String topic, String format) {
         Map<String, Object> promptParams = new HashMap<>();
-        promptParams.put("language", translation.language());
-        promptParams.put("text", translation.text());
+        promptParams.put("topic", topic);
         promptParams.put("format", format);
+
         return promptParams;
     }
 }

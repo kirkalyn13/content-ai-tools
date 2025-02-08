@@ -25,4 +25,10 @@ public class ContentController {
         GeneratedContent result = contentService.generateContent(contentParams);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @GetMapping("/formatted")
+    public ResponseEntity<GeneratedContent> getContentFormatted(@RequestBody ContentParams contentParams) {
+        GeneratedContent result = contentService.generateFormattedContent(contentParams);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

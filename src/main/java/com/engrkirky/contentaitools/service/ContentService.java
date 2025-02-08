@@ -5,4 +5,5 @@ import com.engrkirky.contentaitools.dto.GeneratedContent;
 
 public interface ContentService {
     GeneratedContent generateContent(ContentParams contentParams);
+    GeneratedContent generateFormattedContent(ContentParams contentParams);
 }
