@@ -31,10 +31,7 @@ public class TranslationServiceImpl implements TranslationService {
         BeanOutputConverter<Translation> outputParser = new BeanOutputConverter<>(Translation.class);
         String format = outputParser.getFormat();
 
-        Map<String, Object> promptParams = new HashMap<>();
-        promptParams.put("language", translation.language());
-        promptParams.put("text", translation.text());
-        promptParams.put("format", format);
+        Map<String, Object> promptParams = getPromptParams(translation, format);
 
         PromptTemplate promptTemplate = new PromptTemplate(promptMessage, promptParams);
         Prompt prompt = promptTemplate.create();
@@ -44,5 +41,13 @@ public class TranslationServiceImpl implements TranslationService {
                 .content();
 
         return outputParser.convert(content);
+    }
+
+    private static Map<String, Object> getPromptParams(Translation translation, String format) {
+        Map<String, Object> promptParams = new HashMap<>();
+        promptParams.put("language", translation.language());
+        promptParams.put("text", translation.text());
+        promptParams.put("format", format);
+        return promptParams;
     }
 }
