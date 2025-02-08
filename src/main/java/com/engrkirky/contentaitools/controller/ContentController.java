@@ -1,6 +1,7 @@
 package com.engrkirky.contentaitools.controller;
 
-import com.engrkirky.contentaitools.dto.*;
+import com.engrkirky.contentaitools.dto.ContentParams;
+import com.engrkirky.contentaitools.dto.GeneratedContent;
 import com.engrkirky.contentaitools.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
