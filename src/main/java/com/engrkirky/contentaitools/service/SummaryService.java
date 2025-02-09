@@ -1,5 +1,7 @@
 package com.engrkirky.contentaitools.service;
 
+import com.engrkirky.contentaitools.dto.Summary;
+
 public interface SummaryService {
-    String summarize(int id);
+    Summary summarizeArticle(String region, String title);
 }

@@ -1,5 +1,6 @@
 package com.engrkirky.contentaitools.controller;
 
+import com.engrkirky.contentaitools.dto.Summary;
 import com.engrkirky.contentaitools.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,9 @@ public class SummaryController {
         this.summaryService = summaryService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getSummary(@PathVariable("id") int id) {
-        String result = summaryService.summarize(id);
+    @GetMapping("/{region}/{title}")
+    public ResponseEntity<Summary> getSummary(@PathVariable("region") String region, @PathVariable("title") String title) {
+        Summary result = summaryService.summarizeArticle(region, title);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
