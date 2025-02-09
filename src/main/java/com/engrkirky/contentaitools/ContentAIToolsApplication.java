@@ -1,11 +1,11 @@
 package com.engrkirky.contentaitools;
 
-import com.engrkirky.contentaitools.config.SummaryConfigProperties;
+import com.engrkirky.contentaitools.config.CmsConfigProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-@EnableConfigurationProperties(SummaryConfigProperties.class)
+@EnableConfigurationProperties(CmsConfigProperties.class)
 @SpringBootApplication
 public class ContentAIToolsApplication {
 
