@@ -6,7 +6,7 @@ import com.engrkirky.contentaitools.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,13 +21,13 @@ public class ContentController {
         this.contentService = contentService;
     }
 
-    @GetMapping()
+    @PostMapping()
     public ResponseEntity<GeneratedContent> getContent(@RequestBody ContentParams contentParams) {
         GeneratedContent result = contentService.generateContent(contentParams);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/formatted")
+    @PostMapping("/formatted")
     public ResponseEntity<String> getContentFormatted(@RequestBody ContentParams contentParams) {
         String result = contentService.generateFormattedContent(contentParams);
         return new ResponseEntity<>(result, HttpStatus.OK);
