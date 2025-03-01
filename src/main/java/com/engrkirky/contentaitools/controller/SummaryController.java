@@ -5,8 +5,8 @@ import com.engrkirky.contentaitools.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +20,7 @@ public class SummaryController {
         this.summaryService = summaryService;
     }
 
-    @GetMapping("/{region}/{title}")
+    @PostMapping("/{region}/{title}")
     public ResponseEntity<Summary> getSummary(@PathVariable("region") String region, @PathVariable("title") String title) {
         Summary result = summaryService.summarizeArticle(region, title);
 
